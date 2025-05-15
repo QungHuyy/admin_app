@@ -93,7 +93,7 @@ function UserCus(props) {
                                                         <td>{value.email}</td>
                                                         <td>
                                                             <div className="d-flex">
-                                                                <Link to={"user/update/" + value._id} className="btn btn-success mr-1">Update</Link>
+                                                                <Link to={"user/update/" + value._id} className="btn btn-success mr-1">Detail</Link>
 
                                                                 <button type="button" style={{ cursor: 'pointer', color: 'white' }} onClick={() => handleDelete(value)} className="btn btn-danger" >Delete</button>
                                                             </div>

@@ -83,7 +83,7 @@ function UpdateUser(props) {
                     <div className="col-12">
                         <div className="card">
                             <div className="card-body">
-                                <h4 className="card-title">Update User</h4>
+                                <h4 className="card-title">Detail User</h4>
                                 {
                                     validationMsg.api === "Bạn đã update thành công" ?
                                         (
@@ -114,17 +114,17 @@ function UpdateUser(props) {
 
                                     <div className="form-group w-50">
                                         <label htmlFor="name">Name:</label>
-                                        <input type="text" className="form-control" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} required />
+                                        <input type="text" className="form-control" id="name" name="name" value={name} disabled />
                                         <p className="form-text text-danger">{validationMsg.name}</p>
                                     </div>
 
-                                    <div className="form-group w-50">
+                                    {/* <div className="form-group w-50">
                                         <label htmlFor="password">Password:</label>
                                         <input type="password" className="form-control" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                         <p className="form-text text-danger">{validationMsg.password}</p>
-                                    </div>
+                                    </div> */}
 
-                                    <div className="form-group w-50">
+                                    {/* <div className="form-group w-50">
                                         <label htmlFor="categories" className="mr-2">Chọn quyền:</label>
                                         <select name="categories" id="categories" value={permissionChoose} onChange={(e) => setPermissionChoose(e.target.value)}>
                                             <option>Chọn quyền</option>
@@ -135,9 +135,9 @@ function UpdateUser(props) {
                                             }
                                         </select>
                                         <p className="form-text text-danger">{validationMsg.permission}</p>
-                                    </div>
+                                    </div> */}
 
-                                    <button type="submit" className="btn btn-primary">Update</button>
+                                    {/* <button type="submit" className="btn btn-primary">Update</button> */}
                                 </form>
                             </div>
                         </div>
@@ -145,7 +145,7 @@ function UpdateUser(props) {
                 </div>
             </div>
             <footer className="footer text-center text-muted">
-                All Rights Reserved by Adminmart. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
+     
     </footer>
         </div>
     );
