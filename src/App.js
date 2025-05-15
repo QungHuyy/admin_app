@@ -51,7 +51,34 @@ import Sale from './component/Sale/Sale';
 import CreateSale from './component/Sale/CreateSale';
 import UpdateSale from './component/Sale/UpdateSale';
 
+// Import component Comment
+import Comment from './component/Comment/Comment';
+
+import Dashboard from './component/Dashboard/Dashboard'
+
 function App() {
+  useEffect(() => {
+    // Xóa tất cả các bullet points trong sidebar
+    const removeSidebarBullets = () => {
+      // Tìm tất cả các icon có thể là bullet points
+      const bulletIcons = document.querySelectorAll('.sidebar-nav i.fas.fa-circle, .sidebar-nav i.fa-circle, .sidebar-nav .feather-icon');
+      
+      bulletIcons.forEach(icon => {
+        // Ẩn icon
+        icon.style.display = 'none';
+      });
+    };
+    
+    // Chạy ngay khi component mount
+    removeSidebarBullets();
+    
+    // Chạy lại sau khi DOM có thể đã thay đổi
+    const observer = new MutationObserver(removeSidebarBullets);
+    observer.observe(document.body, { childList: true, subtree: true });
+    
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <AuthContextProvider>
       <Router>
@@ -63,7 +90,7 @@ function App() {
 
           <Switch>
             <Route exact path='/' component={Login} />
-
+            <Route exact path='/dashboard' component={Dashboard} />
             <Route exact path='/customer' component={UserCus} />
             <Route path='/customer/create' component={CreateUserCus} />
             <Route path='/customer/update/:id' component={UpdateUserCus} />
@@ -109,17 +136,15 @@ function App() {
             <Route path='/sale/create' component={CreateSale} />
             <Route path='/sale/:id' component={UpdateSale} />
 
-            <Route component={NotFound} />
-          </Switch>;
+            <Route exact path="/comment" component={Comment} />
 
-      </div>
+            <Route component={NotFound} />
+          </Switch>
+
+        </div>
 
       </Router>
     </AuthContextProvider>
-
-
-
-
   );
 }
 

@@ -45,6 +45,27 @@ function Sale(props) {
         })
     }
 
+    // Thêm hàm xử lý xóa Sale
+    const handleDelete = async (id) => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?')) {
+            try {
+                const response = await SaleAPI.deleteSale(id);
+                if (response.msg === "Thanh Cong") {
+                    // Refresh danh sách sau khi xóa
+                    setFilter({
+                        ...filter,
+                        status: !filter.status
+                    });
+                    alert('Xóa khuyến mãi thành công!');
+                } else {
+                    alert('Xóa khuyến mãi thất bại!');
+                }
+            } catch (error) {
+                console.error('Error deleting sale:', error);
+                alert('Đã xảy ra lỗi khi xóa khuyến mãi!');
+            }
+        }
+    }
 
     return (
         <div className="page-wrapper">
@@ -66,10 +87,12 @@ function Sale(props) {
                                                 <th>ID</th>
                                                 <th>Promotion</th>
                                                 <th>Describe</th>
+                                                <th>Product</th>
+                                                <th>Product Price</th>
                                                 <th>Start</th>
                                                 <th>End</th>
                                                 <th>Status</th>
-                                                <th>Edit</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
 
@@ -80,12 +103,26 @@ function Sale(props) {
                                                         <td className="name">{value._id}</td>
                                                         <td className="name">{value.promotion}</td>
                                                         <td className="name">{value.describe}</td>
+                                                        <td className="name">{value.id_product?.name_product || 'N/A'}</td>
+                                                        <td className="name">
+                                                            {value.id_product?.price_product 
+                                                                ? new Intl.NumberFormat('vi-VN',{style: 'decimal',decimal: 'VND'}).format(value.id_product.price_product) + ' VNĐ'
+                                                                : 'N/A'
+                                                            }
+                                                        </td>
                                                         <td className="name">{value.start}</td>
                                                         <td className="name">{value.end}</td>
                                                         <td className="name">{value.status ? "Active" : "Disable"}</td>
                                                         <td>
                                                             <div className="d-flex">
                                                                 <Link to={"/sale/" + value._id} className="btn btn-success mr-1">Update</Link>
+                                                                <button 
+                                                                    type="button" 
+                                                                    className="btn btn-danger"
+                                                                    onClick={() => handleDelete(value._id)}
+                                                                >
+                                                                    Delete
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -101,8 +138,9 @@ function Sale(props) {
                 </div>
             </div>
             <footer className="footer text-center text-muted">
-                 
-        </footer>
+                All Rights Reserved by Adminmart. Designed and Developed by
+                <a href="https://www.facebook.com/KimTien.9920/">Tiền Kim</a>.
+            </footer>
         </div>
     );
 }

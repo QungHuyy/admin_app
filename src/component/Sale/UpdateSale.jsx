@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form'
 import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 import productAPI from '../Api/productAPI';
 import SaleAPI from '../Api/SaleAPI';
 import { useParams } from 'react-router';
@@ -23,7 +24,9 @@ function UpdateSale(props) {
             promotion: promotion,
             describe: describe,
             status: status,
-            id_product: selectProduct
+            id_product: selectProduct,
+            start: startDate,
+            end: endDate
         }
 
         const response = await SaleAPI.updateSale(id, body)
@@ -35,7 +38,9 @@ function UpdateSale(props) {
     const [promotion, setPromotion] = useState('')
     const [describe, setDescribe] = useState('')
     const [status, setStatus] = useState('')
-    const [selectProduct, setSelectProduct] = useState("60866d646da8e98ac1e39ba0")
+    const [selectProduct, setSelectProduct] = useState("")
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
 
     const [product, setProduct] = useState([])
 
@@ -52,12 +57,22 @@ function UpdateSale(props) {
 
             setPromotion(resDetail.promotion)
             setDescribe(resDetail.describe)
-
+            setStatus(resDetail.status ? "true" : "false")
+            setSelectProduct(resDetail.id_product)
+            
+            // Chuyển đổi chuỗi ngày thành đối tượng Date
+            if (resDetail.start) {
+                setStartDate(new Date(resDetail.start))
+            }
+            
+            if (resDetail.end) {
+                setEndDate(new Date(resDetail.end))
+            }
         }
 
         fetchData()
 
-    }, [])
+    }, [id])
 
     return (
         <div className="page-wrapper">
@@ -66,7 +81,7 @@ function UpdateSale(props) {
                     <div className="col-12">
                         <div className="card">
                             <div className="card-body">
-                                <h4 className="card-title">Update Product</h4>
+                                <h4 className="card-title">Update Sale</h4>
                                 {
                                     showMessage === "Bạn đã cập nhật thành công" ?
                                         (
@@ -86,7 +101,7 @@ function UpdateSale(props) {
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                 
                                     <div className="form-group w-50">
-                                        <label htmlFor="name">Khuyến Mãi</label>
+                                        <label htmlFor="name">Khuyến Mãi (%)</label>
                                         <input type="text" className="form-control" id="promotion" 
                                         {...register('promotion')} 
                                         value={promotion} 
@@ -103,20 +118,31 @@ function UpdateSale(props) {
                                     </div>
                                     <div className="form-group w-50">
                                         <label htmlFor="description">Trạng Thái</label>
-                                        <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="true" onClick={(e) => setStatus(e.target.value)} />
-                                        <label class="form-check-label" for="gridRadios1">
+                                        <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="true" checked={status === "true"} onClick={(e) => setStatus(e.target.value)} />
+                                        <label className="form-check-label" htmlFor="gridRadios1">
                                             Hoạt Động
                                         </label>
                                         </div>
-                                        <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="false" onClick={(e) => setStatus(e.target.value)} />
-                                        <label class="form-check-label" for="gridRadios2">
+                                        <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="false" checked={status === "false"} onClick={(e) => setStatus(e.target.value)} />
+                                        <label className="form-check-label" htmlFor="gridRadios2">
                                             Ngưng Hoạt Động
                                         </label>
                                         </div>
                                     </div>
-                                    <div className="form-group w-25">
+                                    <div className="form-group w-50">
+                                        <label htmlFor="description">Ngày bắt đầu</label>
+                                        <br />
+                                        <DatePicker className="form-control" selected={startDate} onChange={(date) => setStartDate(date)} />
+                                    </div>
+                                    <div className="form-group w-50">
+                                        <label htmlFor="description">Ngày kết thúc</label>
+                                        <br />
+                                        <DatePicker className="form-control" selected={endDate} onChange={(date) => setEndDate(date)} />
+                                    </div>
+                                    <div className="form-group w-50">
+                                        <label htmlFor="product">Sản phẩm</label>
                                         <select className="form-control" value={selectProduct} onChange={(e) => setSelectProduct(e.target.value)}>
                                             {
                                                 product && product.map(value => (

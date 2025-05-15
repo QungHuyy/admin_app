@@ -46,6 +46,13 @@
             padding: $topbar-navlink-padding;
             font-size: $topbar-navlink-font-size;
             line-height: $topbar-height;
+            text-decoration: none; /* Bỏ gạch chân cho nav-link */
+            transition: all 0.3s ease;
+            
+            &:hover, &.active {
+                font-weight: 600; /* Làm đậm khi hover hoặc active */
+                color: $themecolor; /* Đổi màu khi hover hoặc active */
+            }
 
             .notify-no {
                 position: absolute;
@@ -58,6 +65,11 @@
 
         .navbar-nav>.nav-item {
             transition: 0.2s ease-in;
+            
+            &.active > .nav-link {
+                font-weight: 600; /* Làm đậm khi active */
+                color: $themecolor; /* Đổi màu khi active */
+            }
         }
     }
 
@@ -103,7 +115,16 @@
             height: 20px;
             width: 20px;
         }
-
+    }
+    
+    // Bỏ gạch chân cho tất cả các liên kết trong topbar
+    a {
+        text-decoration: none;
+        
+        &:hover {
+            text-decoration: none;
+            font-weight: 600; /* Làm đậm khi hover */
+        }
     }
 }
 
@@ -149,9 +170,53 @@ Designed dropdown
                 }
             }
         }
+        
+        // Bỏ gạch chân và làm đậm khi hover cho các liên kết trong dropdown
+        a {
+            text-decoration: none;
+            
+            &:hover, &.active {
+                text-decoration: none;
+                font-weight: 600; /* Làm đậm khi hover hoặc active */
+            }
+        }
     }
     .dropdown-toggle::after{
         display:none;
+    }
+}
+
+// Thêm style mạnh hơn để bỏ gạch chân cho tất cả các liên kết trong sidebar
+.left-sidebar {
+    .sidebar-nav {
+        ul {
+            .sidebar-item {
+                .sidebar-link {
+                    text-decoration: none !important;
+                    
+                    &:hover, &.active {
+                        text-decoration: none !important;
+                        font-weight: 600;
+                        color: $themecolor;
+                    }
+                }
+                
+                &.selected > .sidebar-link {
+                    font-weight: 600;
+                    color: $themecolor;
+                    text-decoration: none !important;
+                    
+                    i {
+                        color: $themecolor;
+                    }
+                }
+                
+                // Bỏ gạch chân cho tất cả các liên kết con
+                .sidebar-link, a {
+                    text-decoration: none !important;
+                }
+            }
+        }
     }
 }
 

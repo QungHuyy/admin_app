@@ -83,9 +83,20 @@ function CompletedOrder(props) {
     const [getDay, setGetDay] = useState('null')
     const [getMonth, setGetMonth] = useState('null')
     const [getYear, setGetYear] = useState('null')
+    const [years, setYears] = useState([])
 
     const [errMessage, setErrMessage] = useState('')
     const [subMessage, setSubMessage] = useState('')
+
+    useEffect(() => {
+        // Tạo mảng năm từ 2020 đến năm hiện tại
+        const currentYear = new Date().getFullYear()
+        let yearArray = []
+        for (let i = 2020; i <= currentYear; i++) {
+            yearArray.push(i)
+        }
+        setYears(yearArray)
+    }, [])
 
     const handlerStatistic = (e) => {
 
@@ -174,6 +185,21 @@ function CompletedOrder(props) {
 
     }
 
+    const resetTime = () => {
+        setGetDay('null')
+        setGetMonth('null')
+        setGetYear('null')
+        
+        // Reset filter về trạng thái ban đầu không có getDate
+        setFilter({
+            ...filter,
+            getDate: ''
+        })
+        
+        setSubMessage('Đã reset thời gian thành công!')
+        setErrMessage('')
+    }
+
     return (
         <div className="page-wrapper">
 
@@ -204,9 +230,9 @@ function CompletedOrder(props) {
                                                 order && order.map((value, index) => (
                                                     <tr key={index}>
                                                         <td className="name">{value._id}</td>
-                                                        <td className="name">{value.id_note.fullname}</td>
-                                                        <td className="name">{value.id_user.email}</td>
-                                                        <td className="name">{value.id_note.phone}</td>
+                                                        <td className="name">{value.id_note?.fullname || 'N/A'}</td>
+                                                        <td className="name">{value.id_user?.email || 'N/A'}</td>
+                                                        <td className="name">{value.id_note?.phone || 'N/A'}</td>
                                                         <td className="name">{value.address}</td>
                                                         <td>
                                                             {(() => {
@@ -263,11 +289,16 @@ function CompletedOrder(props) {
                                         <select className="custom-select" style={{ color: 'gray', width: '85px'}}
                                             value={getYear} onChange={(e) => setGetYear(e.target.value)}>
                                             <option value="null">Năm</option>
-                                            <option value="2020">2020</option>
-                                            <option value="2021">2021</option>
+                                            {
+                                                years && years.map(y => (
+                                                    <option value={y} key={y}>{y}</option>
+                                                ))
+                                            }
                                         </select>
                                         &nbsp;
                                         <input type="submit" className="btn btn-primary" value="Lọc Hóa Đơn" onClick={handlerStatistic} />
+                                        &nbsp;
+                                        <button className="btn btn-secondary" onClick={resetTime}>Reset Thời Gian</button>
                                     </div>
                                     <div>
                                     {

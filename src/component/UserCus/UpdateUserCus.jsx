@@ -55,21 +55,25 @@ function UpdateUserCus(props) {
 
 
     const addUser = async () => {
-        const user = {
-            id: id,
-            name: name,
-            password: password,
-            permission: permissionChoose
-        }
-        const query = '?' + queryString.stringify(user)
-        const response = await userApi.update(query)
+        try {
+            const user = {
+                id: id,
+                name: name,
+                password: password,
+                permission: permissionChoose
+            }
+            const query = '?' + queryString.stringify(user)
+            const response = await userApi.update(query)
 
-        if (response.msg === "Bạn đã update thành công") {
-            window.scrollTo(0, 0)
-            setPassword('');
+            if (response.msg === "Bạn đã update thành công") {
+                window.scrollTo(0, 0)
+                setPassword('');
+            }
+            setValidationMsg({ api: response.msg })
+        } catch (error) {
+            console.error("Cập nhật người dùng thất bại:", error)
+            setValidationMsg({ api: "Lỗi server, vui lòng thử lại sau" })
         }
-        setValidationMsg({ api: response.msg })
-
     }
 
     return (

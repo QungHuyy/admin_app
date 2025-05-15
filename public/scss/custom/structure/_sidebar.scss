@@ -291,3 +291,32 @@ User Profile
         border-bottom: 1px solid $custom-border-color !important;
     }
 }
+
+// Thêm style để bỏ gạch chân cho tất cả các liên kết trong sidebar
+.left-sidebar {
+    .sidebar-nav {
+        ul {
+            .sidebar-item {
+                .sidebar-link {
+                    text-decoration: none !important;
+                    
+                    &:hover, &.active {
+                        text-decoration: none !important;
+                        font-weight: 600;
+                        color: $themecolor;
+                    }
+                }
+                
+                &.selected > .sidebar-link {
+                    font-weight: 600;
+                    color: $themecolor;
+                    text-decoration: none !important;
+                    
+                    i {
+                        color: $themecolor;
+                    }
+                }
+            }
+        }
+    }
+}

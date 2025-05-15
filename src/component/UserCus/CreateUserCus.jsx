@@ -64,26 +64,29 @@ function CreateUserCus(props) {
     }
 
     const addUser = async () => {
-        const user = {
-            name: name,
-            email: email,
-            password: password,
-            username: username,
-            permission: permissionChoose
+        try {
+            const user = {
+                name: name,
+                email: email,
+                password: password,
+                username: username,
+                permission: permissionChoose
+            }
+            const query = '?' + queryString.stringify(user)
+            const response = await userApi.create(query)
+
+            if (response.msg === "Bạn đã thêm thành công") {
+                window.scrollTo(0, 0)
+                setName('');
+                setUserName('');
+                setEmail('');
+                setPassword('');
+            }
+            setValidationMsg({ api: response.msg })
+        } catch (error) {
+            console.error("Tạo người dùng thất bại:", error)
+            setValidationMsg({ api: "Lỗi server, vui lòng thử lại sau" })
         }
-        const query = '?' + queryString.stringify(user)
-        const response = await userApi.create(query)
-
-        if (response.msg === "Bạn đã thêm thành công") {
-            window.scrollTo(0, 0)
-            setName('');
-            setUserName('');
-            setEmail('');
-            setPassword('');
-
-        }
-        setValidationMsg({ api: response.msg })
-
     }
 
     return (

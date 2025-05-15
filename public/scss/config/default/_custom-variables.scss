@@ -2,20 +2,20 @@
 // Theme Colors
 // -------------------------------
 
-$themecolor: $blue;
+$themecolor: #4e73df; // Màu xanh dương hiện đại
 $theme-light: #fff;
-$theme-dark: #212529;
+$theme-dark: #2e3951; // Màu tối hơn một chút
 $background-alt: #262d35;
 
 // ---------------------------------------------
 // Skins For changing navbar,sidebar colors
 // ---------------------------------------------
-$gradient-bg: -webkit-linear-gradient(0deg, rgb(63, 80, 246) 0%, rgb(105, 76, 254) 100%);
+$gradient-bg: linear-gradient(to right, #4e73df, #36b9cc);
 $skin1: $gradient-bg;
-$skin2: #fe5419;
-$skin3: #00b0ff;
-$skin4: #6659f7;
-$skin5: #1d2e42;
+$skin2: #36b9cc; // Màu xanh ngọc
+$skin3: #1cc88a; // Màu xanh lá
+$skin4: #f6c23e; // Màu vàng
+$skin5: #e74a3b; // Màu đỏ
 $skin6: #fff;
 
 $gray-0: $white;
@@ -24,8 +24,8 @@ $gray-0: $white;
 // Shadow default
 // -----------------------------
 
-$shadow: 0px 3px 9px 0px rgba(162, 176, 190, 0.15);
-$custom-shadow: 0 2px 9px 0 rgba(169, 184, 200, .2);
+$shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
+$custom-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
 
 $custom-radius: 60px;
 

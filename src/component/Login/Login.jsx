@@ -27,29 +27,43 @@ function Login() {
 
     const handleLogin = async () => {
         if (!validateAll()) return;
-    
+
         const user = { email, password };
-    //
+
         try {
             const response = await userAPI.login(user);
             console.log("Response từ API:", response);
-    
-            if (response.msg === "Đăng nhập thành công") {  // ✅ Đổi từ statusCode sang msg
+
+            if (response.msg === "Đăng nhập thành công") {
                 console.log("Dữ liệu user:", response.user);
-    
+
+                // Kiểm tra nếu là admin từ biến môi trường
+                if (response.user.email === process.env.REACT_APP_ADMIN_EMAIL || 
+                    response.user._id === 'admin') {
+                    console.log("Đăng nhập với tài khoản admin đặc biệt");
+                    addLocal(response.jwt, response.user);
+                    history.push('/user');
+                    return;
+                }
+
                 if (response.user && response.user.id_permission) {
                     const permission = response.user.id_permission;
                     console.log("Quyền user:", permission);
-    
-                    addLocal(response.jwt, response.user);
-                    console.log("➡ Chuyển hướng...");
-    
-                    if (permission === "Nhân Viên") {
-                        console.log("➡ Chuyển hướng /customer");
-                        history.push('/customer');
-                    } else if (permission === "6087dcb5f269113b3460fce4") {
-                        console.log("➡ Chuyển hướng /user");
-                        history.push('/user');
+
+                    // Kiểm tra quyền trước khi lưu thông tin và chuyển hướng
+                    if (permission === "Nhân Viên" || permission === "6087dcb5f269113b3460fce4" || permission === "Admin") {
+                        // Lưu thông tin đăng nhập
+                        addLocal(response.jwt, response.user);
+                        console.log("➡ Chuyển hướng...");
+
+                        // Chuyển hướng dựa trên quyền
+                        if (permission === "Nhân Viên") {
+                            console.log("➡ Chuyển hướng /customer");
+                            history.push('/customer');
+                        } else if (permission === "6087dcb5f269113b3460fce4" || permission === "Admin") {
+                            console.log("➡ Chuyển hướng /user");
+                            history.push('/user');
+                        }
                     } else {
                         setValidationMsg({ api: "Bạn không có quyền truy cập" });
                     }
