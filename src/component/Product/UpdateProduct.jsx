@@ -11,7 +11,10 @@ function UpdateProduct(props) {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
-    const [number, setNumber] = useState('');
+    // Thay đổi từ number thành inventoryS, inventoryM, inventoryL
+    const [inventoryS, setInventoryS] = useState('0');
+    const [inventoryM, setInventoryM] = useState('0');
+    const [inventoryL, setInventoryL] = useState('0');
     const [categoryChoose, setCategoryChoose] = useState('');
     const [genderChoose, setGenderChoose] = useState('Unisex');
     const [file, setFile] = useState();
@@ -28,27 +31,39 @@ function UpdateProduct(props) {
             setName(rs.name_product)
             setPrice(rs.price_product)
             setDescription(rs.describe)
-            setNumber(rs.number) // Lấy số lượng từ API
+            
+            // Xử lý số lượng theo size
+            if (rs.inventory) {
+                setInventoryS(rs.inventory.S || '0')
+                setInventoryM(rs.inventory.M || '0')
+                setInventoryL(rs.inventory.L || '0')
+            } else {
+                // Nếu chưa có inventory, sử dụng number để tương thích ngược
+                setInventoryS(rs.number || '0')
+                setInventoryM('0')
+                setInventoryL('0')
+            }
+            
             setCategoryChoose(rs.id_category)
+            setGenderChoose(rs.gender || 'Unisex')
             setImage(rs.image)
             setCategory(ct)
         }
         fetchAllData()
-    }, [])
+    }, [id])
 
     const saveFile = (e) => {
         setFile(e.target.files[0]);
         setFileName(e.target.files[0].name);
     };
 
-    const onChangeNumber = (e) => {
-
+    // Cập nhật hàm xử lý số lượng
+    const onChangeInventory = (e, setFunction) => {
         const value = e.target.value
         if (!Number.isNaN(value) && Number(value) >= 0) {
-            setNumber(value)
+            setFunction(value)
         }
     }
-
 
     const onChangePrice = (e) => {
         const value = e.target.value
@@ -68,8 +83,9 @@ function UpdateProduct(props) {
         if (isEmpty(description)) {
             msg.description = "Mô tả không được để trống"
         }
-        if (isEmpty(number.toString())) {
-            msg.number = "Số lượng không được để trống"
+        // Kiểm tra ít nhất một size phải có số lượng
+        if (isEmpty(inventoryS) && isEmpty(inventoryM) && isEmpty(inventoryL)) {
+            msg.inventory = "Ít nhất một size phải có số lượng"
         }
         if (isEmpty(categoryChoose)) {
             msg.category = "Vui lòng chọn loại"
@@ -97,7 +113,10 @@ function UpdateProduct(props) {
         formData.append("name", name)
         formData.append("price", price)
         formData.append("category", categoryChoose)
-        formData.append("number", number)
+        // Thêm số lượng theo size thay vì number
+        formData.append("inventoryS", inventoryS)
+        formData.append("inventoryM", inventoryM)
+        formData.append("inventoryL", inventoryL)
         formData.append("description", description)
         formData.append("gender", genderChoose)
 
@@ -124,14 +143,14 @@ function UpdateProduct(props) {
                                     validationMsg.api === "Bạn đã thêm thành công" ?
                                         (
                                             <div className="alert alert-success alert-dismissible fade show" role="alert">
-                                                {validationMsg.api}
+                                              <p>{validationMsg.api}</p>
                                                 <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                                                     <span aria-hidden="true">×</span>
                                                 </button>
                                             </div>
                                         ) :
                                         (
-                                            <p className="form-text text-danger">{validationMsg.api}</p>
+                                            <p style={{ color: 'green' }} className="form-text">{validationMsg.api}</p>
                                         )
                                 }
 
@@ -152,10 +171,49 @@ function UpdateProduct(props) {
                                         <input type="text" className="form-control" id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
                                         <p className="form-text text-danger">{validationMsg.description}</p>
                                     </div>
+                                    
+                                    {/* Thay đổi phần số lượng */}
                                     <div className="form-group w-50">
-                                        <label htmlFor="number">Số lượng: </label>
-                                        <input type="text" className="form-control" id="number" name="number" value={number} onChange={(e) => onChangeNumber(e)} required />
-                                        <p className="form-text text-danger">{validationMsg.number}</p>
+                                        <label>Số lượng theo size:</label>
+                                        <div className="row">
+                                            <div className="col-md-4">
+                                                <label htmlFor="inventoryS">Size S:</label>
+                                                <input 
+                                                    type="number" 
+                                                    className="form-control" 
+                                                    id="inventoryS" 
+                                                    name="inventoryS" 
+                                                    value={inventoryS} 
+                                                    onChange={(e) => onChangeInventory(e, setInventoryS)} 
+                                                    min="0"
+                                                />
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label htmlFor="inventoryM">Size M:</label>
+                                                <input 
+                                                    type="number" 
+                                                    className="form-control" 
+                                                    id="inventoryM" 
+                                                    name="inventoryM" 
+                                                    value={inventoryM} 
+                                                    onChange={(e) => onChangeInventory(e, setInventoryM)} 
+                                                    min="0"
+                                                />
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label htmlFor="inventoryL">Size L:</label>
+                                                <input 
+                                                    type="number" 
+                                                    className="form-control" 
+                                                    id="inventoryL" 
+                                                    name="inventoryL" 
+                                                    value={inventoryL} 
+                                                    onChange={(e) => onChangeInventory(e, setInventoryL)} 
+                                                    min="0"
+                                                />
+                                            </div>
+                                        </div>
+                                        <p className="form-text text-danger">{validationMsg.inventory}</p>
                                     </div>
 
                                     <div className="form-group w-50">
@@ -173,7 +231,7 @@ function UpdateProduct(props) {
                                         <p className="form-text text-danger">{validationMsg.category}</p>
                                     </div>
 
-                                    {/* <div className="form-group w-50">
+                                    <div className="form-group w-50">
                                         <label htmlFor="gender" className="mr-2">Chọn giới tính:</label>
                                         <select name="gender" id="gender" value={genderChoose} onChange={(e) => setGenderChoose(e.target.value)}>
                                             {
@@ -181,9 +239,8 @@ function UpdateProduct(props) {
                                                     <option value={item} key={index}>{item}</option>
                                                 ))
                                             }
-
                                         </select>
-                                    </div> */}
+                                    </div>
 
                                     <div className="form-group w-50">
                                         <label>Hình Ảnh</label>

@@ -10,7 +10,10 @@ function CreateProduct(props) {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
-    const [number, setNumber] = useState('');
+    // Thay đổi từ number thành inventoryS, inventoryM, inventoryL
+    const [inventoryS, setInventoryS] = useState('0');
+    const [inventoryM, setInventoryM] = useState('0');
+    const [inventoryL, setInventoryL] = useState('0');
     const [categoryChoose, setCategoryChoose] = useState('');
     const [genderChoose, setGenderChoose] = useState('Unisex');
     const [file, setFile] = useState();
@@ -32,10 +35,11 @@ function CreateProduct(props) {
         setFileName(e.target.files[0].name);
     };
 
-    const onChangeNumber = (e) => {
+    // Cập nhật hàm xử lý số lượng
+    const onChangeInventory = (e, setFunction) => {
         const value = e.target.value
         if (!Number.isNaN(value) && Number(value) >= 0) {
-            setNumber(value)
+            setFunction(value)
         }
     }
 
@@ -61,10 +65,9 @@ function CreateProduct(props) {
         if (isEmpty(description)) {
             msg.description = "Mô tả không được để trống"
         }
-        if (isEmpty(number)) {
-            msg.number = "Số lượng không được để trống"
-        } else if (!priceRegex.test(number)) {
-            msg.number = "Số lượng sai định dạng"
+        // Kiểm tra ít nhất một size phải có số lượng
+        if (isEmpty(inventoryS) && isEmpty(inventoryM) && isEmpty(inventoryL)) {
+            msg.inventory = "Ít nhất một size phải có số lượng"
         }
         if (isEmpty(categoryChoose)) {
             msg.category = "Vui lòng chọn loại"
@@ -91,9 +94,17 @@ function CreateProduct(props) {
         formData.append("name", name)
         formData.append("price", price)
         formData.append("category", categoryChoose)
-        formData.append("number", number)
+        // Thêm số lượng theo size
+        formData.append("inventoryS", inventoryS)
+        formData.append("inventoryM", inventoryM)
+        formData.append("inventoryL", inventoryL)
         formData.append("description", description)
         formData.append("gender", genderChoose)
+        
+        console.log("Sending product data:", {
+            name, price, category: categoryChoose, 
+            inventoryS, inventoryM, inventoryL, description, gender: genderChoose
+        });
 
         const response = await productAPI.create(formData)
 
@@ -101,11 +112,13 @@ function CreateProduct(props) {
             setName('');
             setPrice('');
             setDescription('');
-            setNumber('')
-            setCategoryChoose('')
-            setGenderChoose('Unisex')
-            setFile('')
-            setFileName('')
+            setInventoryS('0');
+            setInventoryM('0');
+            setInventoryL('0');
+            setCategoryChoose('');
+            setGenderChoose('Unisex');
+            setFile('');
+            setFileName('');
             window.scrollTo(0, 0)
         }
         setValidationMsg({ api: response.msg })
@@ -153,14 +166,52 @@ function CreateProduct(props) {
                                         <input type="text" className="form-control" id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
                                         <p className="form-text text-danger">{validationMsg.description}</p>
                                     </div>
+                                    
+                                    {/* Thay đổi phần số lượng */}
                                     <div className="form-group w-50">
-                                        <label htmlFor="number">Số lượng: </label>
-                                        <input type="number" className="form-control" id="number" name="number" value={number} onChange={(e) => onChangeNumber(e)} required />
-                                        <p className="form-text text-danger">{validationMsg.number}</p>
+                                        <label>Số lượng theo size:</label>
+                                        <div className="row">
+                                            <div className="col-md-4">
+                                                <label htmlFor="inventoryS">Size S:</label>
+                                                <input 
+                                                    type="number" 
+                                                    className="form-control" 
+                                                    id="inventoryS" 
+                                                    name="inventoryS" 
+                                                    value={inventoryS} 
+                                                    onChange={(e) => onChangeInventory(e, setInventoryS)} 
+                                                    min="0"
+                                                />
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label htmlFor="inventoryM">Size M:</label>
+                                                <input 
+                                                    type="number" 
+                                                    className="form-control" 
+                                                    id="inventoryM" 
+                                                    name="inventoryM" 
+                                                    value={inventoryM} 
+                                                    onChange={(e) => onChangeInventory(e, setInventoryM)} 
+                                                    min="0"
+                                                />
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label htmlFor="inventoryL">Size L:</label>
+                                                <input 
+                                                    type="number" 
+                                                    className="form-control" 
+                                                    id="inventoryL" 
+                                                    name="inventoryL" 
+                                                    value={inventoryL} 
+                                                    onChange={(e) => onChangeInventory(e, setInventoryL)} 
+                                                    min="0"
+                                                />
+                                            </div>
+                                        </div>
+                                        <p className="form-text text-danger">{validationMsg.inventory}</p>
                                     </div>
 
                                     <div className="form-group w-50">
-                                        {/* <label htmlFor="categories" className="mr-2">Chọn loại:</label> */}
                                         <label htmlFor="categories" className="mr-2">Chọn nhà sản xuất:</label>
                                         <select name="categories" id="categories" value={categoryChoose} onChange={(e) => setCategoryChoose(e.target.value)}>
                                             <option >Chọn loại</option>
@@ -169,12 +220,11 @@ function CreateProduct(props) {
                                                     <option value={item._id} key={index} >{item.category}</option>
                                                 ))
                                             }
-
                                         </select>
                                         <p className="form-text text-danger">{validationMsg.category}</p>
                                     </div>
 
-                                    {/* <div className="form-group w-50">
+                                    <div className="form-group w-50">
                                         <label htmlFor="gender" className="mr-2">Chọn giới tính:</label>
                                         <select name="gender" id="gender" value={genderChoose} onChange={(e) => setGenderChoose(e.target.value)}>
                                             {
@@ -182,9 +232,8 @@ function CreateProduct(props) {
                                                     <option value={item} key={index}>{item}</option>
                                                 ))
                                             }
-
                                         </select>
-                                    </div> */}
+                                    </div>
 
                                     <div className="form-group w-50">
                                         <label>Hình Ảnh</label>
