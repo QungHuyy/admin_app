@@ -28,6 +28,8 @@ function UpdateSale(props) {
             start: startDate,
             end: endDate
         }
+        console.log("du lieu",body);
+        
 
         const response = await SaleAPI.updateSale(id, body)
 
