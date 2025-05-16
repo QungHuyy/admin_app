@@ -105,7 +105,7 @@ function Product() {
                                                             <p style={{width:"100%",textWrap:"wrap"}}>{value.describe.length>145 ? value.describe.slice(0,145)+"...":value.describe}</p>
                                                             </td>
                                                         <td>{value.id_category ? value.id_category.category : ""}</td>
-                                                        <td>{value.number || 0}</td>
+                                                        <td>{value?.inventory.S  + value?.inventory.M  +value?.inventory.L  }</td>
                                                         <td>{value.gender}</td>
                                                         <td>
                                                             <div className="d-flex">

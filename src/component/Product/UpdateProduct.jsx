@@ -84,7 +84,7 @@ function UpdateProduct(props) {
             msg.description = "Mô tả không được để trống"
         }
         // Kiểm tra ít nhất một size phải có số lượng
-        if (isEmpty(inventoryS) && isEmpty(inventoryM) && isEmpty(inventoryL)) {
+        if (inventoryS==="" && inventoryM==="" && inventoryL==="" ) {
             msg.inventory = "Ít nhất một size phải có số lượng"
         }
         if (isEmpty(categoryChoose)) {
@@ -120,6 +120,8 @@ function UpdateProduct(props) {
         formData.append("description", description)
         formData.append("gender", genderChoose)
 
+        console.log(formData);
+        
         const response = await productAPI.update(formData)
 
         if (response.msg === "Bạn đã update thành công") {
@@ -260,9 +262,7 @@ function UpdateProduct(props) {
                     </div>
                 </div>
             </div>
-            <footer className="footer text-center text-muted">
-                All Rights Reserved by Adminmart. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
-            </footer>
+          
         </div>
     );
 }
