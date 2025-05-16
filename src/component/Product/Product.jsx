@@ -100,7 +100,9 @@ function Product() {
                                                         <td className="name">{value.name_product}</td>
                                                         <td>{new Intl.NumberFormat('vi-VN',{style: 'decimal',decimal: 'VND'}).format(value.price_product)+ ' VNĐ'}</td>
                                                         <td><img src={value.image} alt="" style={{ width: '70px' }} /></td>
-                                                        <td className="name" style={{ width: '40px' }}>{value.describe}</td>
+                                                        <td className="name" style={{ minWidth: 400,maxWidth:400, }}>
+                                                            <p style={{width:"100%",textWrap:"wrap"}}>{value.describe.length>145 ? value.describe.slice(0,145)+"...":value.describe}</p>
+                                                            </td>
                                                         <td>{value.id_category ? value.id_category.category : ""}</td>
                                                         <td>{value.number || 0}</td>
                                                         <td>

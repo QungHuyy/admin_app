@@ -14,7 +14,7 @@ function Search({ handlerSearch }) {
 
         if (handlerSearch) {
 
-            //Nếu người dùng đang nhập thì mình clear cái giây đó
+            //Nếu User đang nhập thì mình clear cái giây đó
             if (delaySearchTextTimeOut.current) {
                 clearTimeout(delaySearchTextTimeOut.current)
             }

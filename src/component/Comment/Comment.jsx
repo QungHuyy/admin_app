@@ -26,12 +26,13 @@ function Comment(props) {
 
         const fetchAllData = async () => {
             try {
+                // await fetch('http://localhost:8000/api/admin/comment/').then((data)=> console.log(JSON.stringify(data)) )
                 const response = await CommentAPI.getComments(query);
                 setComments(response.comments);
                 setTotalPage(response.totalPage);
             } catch (error) {
                 console.error("Error fetching comments:", error);
-                alert("Có lỗi xảy ra khi tải danh sách đánh giá");
+                alert("Có lỗi xảy ra khi tải danh sách Rating");
             }
         };
 
@@ -61,7 +62,7 @@ function Comment(props) {
             setShowUserModal(true);
         } catch (error) {
             console.error("Error fetching user info:", error);
-            alert("Có lỗi xảy ra khi tải thông tin người dùng");
+            alert("Có lỗi xảy ra khi tải thông tin User");
         }
     };
 
@@ -80,13 +81,13 @@ function Comment(props) {
                     ...filter,
                     status: !filter.status
                 });
-                alert("Xóa đánh giá thành công");
+                alert("Delete Rating thành công");
             } else {
-                alert(response.message || "Có lỗi xảy ra khi xóa đánh giá");
+                alert(response.message || "Có lỗi xảy ra khi Delete Rating");
             }
         } catch (error) {
             console.error("Error deleting comment:", error);
-            alert("Có lỗi xảy ra khi xóa đánh giá");
+            alert("Có lỗi xảy ra khi Delete Rating");
         }
     };
 
@@ -110,7 +111,7 @@ function Comment(props) {
                     <div className="col-12">
                         <div className="card">
                             <div className="card-body">
-                                <h4 className="card-title">Quản lý đánh giá</h4>
+                                <h4 className="card-title">Rating</h4>
                                 <Search handlerSearch={handlerSearch} />
 
                                 <div className="table-responsive mt-3">
@@ -118,11 +119,11 @@ function Comment(props) {
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Người dùng</th>
-                                                <th>Sản phẩm</th>
-                                                <th>Đánh giá</th>
-                                                <th>Nội dung</th>
-                                                <th>Thao tác</th>
+                                                <th>User</th>
+                                                <th>Product</th>
+                                                <th>Rating</th>
+                                                <th>Comment</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -147,13 +148,13 @@ function Comment(props) {
                                                                 className="btn btn-info mr-1"
                                                                 onClick={() => handleViewUserInfo(comment)}
                                                             >
-                                                                Xem thông tin
+                                                                Detail
                                                             </button>
                                                             <button 
                                                                 className="btn btn-danger"
                                                                 onClick={() => handleDeleteClick(comment)}
                                                             >
-                                                                Xóa
+                                                                Delete
                                                             </button>
                                                         </div>
                                                     </td>
@@ -169,10 +170,10 @@ function Comment(props) {
                 </div>
             </div>
 
-            {/* Modal xem thông tin người dùng */}
+            {/* Modal Detail User */}
             <Modal show={showUserModal} onHide={() => setShowUserModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Thông tin người dùng</Modal.Title>
+                    <Modal.Title>Thông tin User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {userInfo ? (
@@ -182,9 +183,9 @@ function Comment(props) {
                             <p><strong>Số điện thoại:</strong> {userInfo.phone || 'Không có thông tin'}</p>
                             <p><strong>Địa chỉ:</strong> {userInfo.address || 'Không có thông tin'}</p>
                             <hr />
-                            <p><strong>Đánh giá:</strong> {selectedComment && renderStars(selectedComment.star)}</p>
-                            <p><strong>Nội dung:</strong> {selectedComment && selectedComment.content}</p>
-                            <p><strong>Sản phẩm:</strong> {selectedComment && selectedComment.id_product && selectedComment.id_product.name_product}</p>
+                            <p><strong>Rating:</strong> {selectedComment && renderStars(selectedComment.star)}</p>
+                            <p><strong>Comment:</strong> {selectedComment && selectedComment.content}</p>
+                            <p><strong>Product:</strong> {selectedComment && selectedComment.id_product && selectedComment.id_product.name_product}</p>
                         </div>
                     ) : (
                         <p>Đang tải thông tin...</p>
@@ -197,18 +198,18 @@ function Comment(props) {
                 </Modal.Footer>
             </Modal>
 
-            {/* Modal xác nhận xóa */}
+            {/* Modal xác nhận Delete */}
             <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Xác nhận xóa</Modal.Title>
+                    <Modal.Title>Xác nhận Delete</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Bạn có chắc chắn muốn xóa đánh giá này không?</p>
+                    <p>Bạn có chắc chắn muốn Delete Rating này không?</p>
                     {selectedComment && (
                         <div>
-                            <p><strong>Người dùng:</strong> {selectedComment.id_user && selectedComment.id_user.fullname}</p>
-                            <p><strong>Sản phẩm:</strong> {selectedComment.id_product && selectedComment.id_product.name_product}</p>
-                            <p><strong>Nội dung:</strong> {selectedComment.content}</p>
+                            <p><strong>User:</strong> {selectedComment.id_user && selectedComment.id_user.fullname}</p>
+                            <p><strong>Product:</strong> {selectedComment.id_product && selectedComment.id_product.name_product}</p>
+                            <p><strong>Comment:</strong> {selectedComment.content}</p>
                         </div>
                     )}
                 </Modal.Body>
@@ -217,14 +218,12 @@ function Comment(props) {
                         Hủy
                     </Button>
                     <Button variant="danger" onClick={handleDelete}>
-                        Xóa
+                        Delete
                     </Button>
                 </Modal.Footer>
             </Modal>
 
-            <footer className="footer text-center text-muted">
-                All Rights Reserved by Adminmart. Designed and Developed by <a href="https://www.facebook.com/KimTien.9920/">Tiền Kim</a>.
-            </footer>
+            
         </div>
     );
 }

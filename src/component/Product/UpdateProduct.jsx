@@ -138,12 +138,12 @@ function UpdateProduct(props) {
 
                                 <form onSubmit={handleSubmit(handleCreate)}>
                                     <div className="form-group w-50">
-                                        <label htmlFor="name">Tên Sản Phẩm</label>
+                                        <label htmlFor="name">Tên Product</label>
                                         <input type="text" className="form-control" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} required />
                                         <p className="form-text text-danger">{validationMsg.name}</p>
                                     </div>
                                     <div className="form-group w-50">
-                                        <label htmlFor="price">Giá Sản Phẩm</label>
+                                        <label htmlFor="price">Giá Product</label>
                                         <input type="text" className="form-control" id="price" name="price" value={price} onChange={(e) => onChangePrice(e)} required />
                                         <p className="form-text text-danger">{validationMsg.price}</p>
                                     </div>

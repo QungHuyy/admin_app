@@ -45,24 +45,24 @@ function Sale(props) {
         })
     }
 
-    // Thêm hàm xử lý xóa Sale
+    // Thêm hàm xử lý Delete Sale
     const handleDelete = async (id) => {
-        if (window.confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?')) {
+        if (window.confirm('Bạn có chắc chắn muốn Delete khuyến mãi này?')) {
             try {
                 const response = await SaleAPI.deleteSale(id);
                 if (response.msg === "Thanh Cong") {
-                    // Refresh danh sách sau khi xóa
+                    // Refresh danh sách sau khi Delete
                     setFilter({
                         ...filter,
                         status: !filter.status
                     });
-                    alert('Xóa khuyến mãi thành công!');
+                    alert('Delete khuyến mãi thành công!');
                 } else {
-                    alert('Xóa khuyến mãi thất bại!');
+                    alert('Delete khuyến mãi thất bại!');
                 }
             } catch (error) {
                 console.error('Error deleting sale:', error);
-                alert('Đã xảy ra lỗi khi xóa khuyến mãi!');
+                alert('Đã xảy ra lỗi khi Delete khuyến mãi!');
             }
         }
     }
@@ -137,10 +137,7 @@ function Sale(props) {
                     </div>
                 </div>
             </div>
-            <footer className="footer text-center text-muted">
-                All Rights Reserved by Adminmart. Designed and Developed by
-                <a href="https://www.facebook.com/KimTien.9920/">Tiền Kim</a>.
-            </footer>
+           
         </div>
     );
 }

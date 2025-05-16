@@ -58,7 +58,7 @@ import Dashboard from './component/Dashboard/Dashboard'
 
 function App() {
   useEffect(() => {
-    // Xóa tất cả các bullet points trong sidebar
+    // Delete tất cả các bullet points trong sidebar
     const removeSidebarBullets = () => {
       // Tìm tất cả các icon có thể là bullet points
       const bulletIcons = document.querySelectorAll('.sidebar-nav i.fas.fa-circle, .sidebar-nav i.fa-circle, .sidebar-nav .feather-icon');

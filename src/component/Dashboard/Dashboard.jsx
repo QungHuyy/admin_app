@@ -68,7 +68,7 @@ const Dashboard = () => {
             for (const order of recentOrders) {
                 try {
                     if (order._id) {
-                        // Sử dụng API detailOrder để lấy chi tiết sản phẩm trong đơn hàng
+                        // Sử dụng API detailOrder để lấy chi tiết Product trong đơn hàng
                         const detailResponse = await orderAPI.detailOrder(order._id, '');
                         console.log(`Order detail for ${order._id}:`, detailResponse);
                         
@@ -216,7 +216,7 @@ const Dashboard = () => {
                                         <div className="row no-gutters align-items-center">
                                             <div className="col mr-2">
                                                 <div className="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                    Sản phẩm</div>
+                                                    Product</div>
                                                 <div className="h5 mb-0 font-weight-bold text-gray-800">{stats.totalProducts}</div>
                                             </div>
                                             <div className="col-auto">
@@ -256,7 +256,7 @@ const Dashboard = () => {
                                         <div className="row">
                                             <div className="col-md-3 mb-4">
                                                 <Link to="/product" className="btn btn-primary btn-block py-3">
-                                                    <FaBoxOpen className="mr-2" /> Sản Phẩm
+                                                    <FaBoxOpen className="mr-2" /> Product
                                                 </Link>
                                             </div>
                                             <div className="col-md-3 mb-4">
@@ -271,7 +271,7 @@ const Dashboard = () => {
                                             </div>
                                             <div className="col-md-3 mb-4">
                                                 <Link to="/category" className="btn btn-secondary btn-block py-3">
-                                                    <FaListAlt className="mr-2" /> Loại Sản Phẩm
+                                                    <FaListAlt className="mr-2" /> Loại Product
                                                 </Link>
                                             </div>
                                             <div className="col-md-3 mb-4">
@@ -315,7 +315,7 @@ const Dashboard = () => {
                                                         <th>Tên khách hàng</th>
                                                         <th>Số điện thoại</th>
                                                         <th>Ngày đặt đơn</th>
-                                                        <th>Sản phẩm đã đặt</th>
+                                                        <th>Product đã đặt</th>
                                                         <th>Trạng thái</th>
                                                         <th>Tổng tiền</th>
                                                         <th>Hành động</th>
@@ -331,16 +331,16 @@ const Dashboard = () => {
                                                                 {order.products && order.products.length > 0 ? (
                                                                     <div>
                                                                         <div>
-                                                                            <strong>{order.products[0].name_product || order.products[0].id_product?.name_product || 'Sản phẩm'}</strong>
+                                                                            <strong>{order.products[0].name_product || order.products[0].id_product?.name_product || 'Product'}</strong>
                                                                             {order.products[0].count && <span> x{order.products[0].count}</span>}
                                                                             {order.products[0].size && <span> (Size: {order.products[0].size})</span>}
                                                                         </div>
                                                                         {order.products.length > 1 && (
-                                                                            <span className="text-muted">và {order.products.length - 1} sản phẩm khác</span>
+                                                                            <span className="text-muted">và {order.products.length - 1} Product khác</span>
                                                                         )}
                                                                     </div>
                                                                 ) : (
-                                                                    'Đang tải thông tin sản phẩm...'
+                                                                    'Đang tải thông tin Product...'
                                                                 )}
                                                             </td>
                                                             <td>

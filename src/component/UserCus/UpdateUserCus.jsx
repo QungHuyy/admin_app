@@ -71,7 +71,7 @@ function UpdateUserCus(props) {
             }
             setValidationMsg({ api: response.msg })
         } catch (error) {
-            console.error("Cập nhật người dùng thất bại:", error)
+            console.error("Cập nhật User thất bại:", error)
             setValidationMsg({ api: "Lỗi server, vui lòng thử lại sau" })
         }
     }

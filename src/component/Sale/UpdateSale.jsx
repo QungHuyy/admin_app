@@ -142,7 +142,7 @@ function UpdateSale(props) {
                                         <DatePicker className="form-control" selected={endDate} onChange={(date) => setEndDate(date)} />
                                     </div>
                                     <div className="form-group w-50">
-                                        <label htmlFor="product">Sản phẩm</label>
+                                        <label htmlFor="product">Product</label>
                                         <select className="form-control" value={selectProduct} onChange={(e) => setSelectProduct(e.target.value)}>
                                             {
                                                 product && product.map(value => (
@@ -159,9 +159,7 @@ function UpdateSale(props) {
                     </div>
                 </div>
             </div>
-            <footer className="footer text-center text-muted">
-                All Rights Reserved by Adminmart. Designed and Developed by <a href="https://www.facebook.com/KimTien.9920/">Tiền Kim</a>.
-            </footer>
+          
         </div>
     );
 }

@@ -68,7 +68,7 @@ function Login() {
                         setValidationMsg({ api: "Bạn không có quyền truy cập" });
                     }
                 } else {
-                    setValidationMsg({ api: "Dữ liệu người dùng không hợp lệ (Thiếu quyền)" });
+                    setValidationMsg({ api: "Dữ liệu User không hợp lệ (Thiếu quyền)" });
                 }
             } else {
                 setValidationMsg({ api: response.msg });

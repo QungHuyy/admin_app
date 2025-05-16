@@ -84,7 +84,7 @@ function CreateUserCus(props) {
             }
             setValidationMsg({ api: response.msg })
         } catch (error) {
-            console.error("Tạo người dùng thất bại:", error)
+            console.error("Tạo User thất bại:", error)
             setValidationMsg({ api: "Lỗi server, vui lòng thử lại sau" })
         }
     }

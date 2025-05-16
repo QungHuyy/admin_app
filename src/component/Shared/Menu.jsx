@@ -17,9 +17,9 @@ function Menu() {
     { item: "ConfirmDelivery" },
     { item: "CompletedOrder" },
     { item: "CancelOrder" },
-    // { item: "User" },  // Xóa hoặc comment dòng này
-    { item: "Permission" },
-    { item: "Comment" }
+    { item: "Comment" },
+    // { item: "User" },  // Delete hoặc comment dòng này
+    // { item: "Permission" },
   ]);
 
   return (
@@ -44,13 +44,12 @@ function Menu() {
                   
                   <li className="list-divider"></li>
                   <li className="nav-small-cap"><span className="hide-menu">Quản lý hệ thống</span></li>
-
                   <li className="sidebar-item">
                     <a className="sidebar-link has-arrow" href="#" aria-expanded="false">
                       <i data-feather="grid" className="feather-icon"></i>
                       <span className="hide-menu">Quản lý dữ liệu</span>
                     </a>
-                    <ul aria-expanded="false" className="collapse first-level base-level-line">
+                    <ul aria-expanded="false" style={{overflowY:"scroll", height:500}} className="collapse first-level base-level-line ">
                       {
                         menu.map((item, index) => (
                           <li className="sidebar-item" key={index}>
