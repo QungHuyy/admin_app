@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useContext} from 'react';
 import './App.css';
 
 import {
@@ -55,7 +55,7 @@ import UpdateSale from './component/Sale/UpdateSale';
 import Comment from './component/Comment/Comment';
 
 import Dashboard from './component/Dashboard/Dashboard'
-
+import { AuthContext } from './component/context/Auth'
 function App() {
   useEffect(() => {
     // Delete tất cả các bullet points trong sidebar
@@ -79,6 +79,9 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
+
+ 
+
   return (
     <AuthContextProvider>
       <Router>
@@ -89,7 +92,10 @@ function App() {
           <Menu />
 
           <Switch>
-            <Route exact path='/' component={Login} />
+            <Route exact path="/">
+                <LoginTrue />   {/* đây chỉ là JSX, không phải Route */}
+            </Route>
+             {/* <Route exact path='/' component={Login} /> */}
             <Route exact path='/dashboard' component={Dashboard} />
             <Route exact path='/customer' component={UserCus} />
             <Route path='/customer/create' component={CreateUserCus} />
@@ -149,3 +155,16 @@ function App() {
 }
 
 export default App;
+
+
+const LoginTrue = () => {
+  const { jwt, user } = useContext(AuthContext);
+
+  // Nếu đã login → đẩy qua dashboard
+  if (jwt && user) {
+    return <Redirect to="/dashboard" />;
+  }
+
+  // Chưa login → hiện trang Login
+  return <Login />;
+};

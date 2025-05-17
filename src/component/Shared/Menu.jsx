@@ -36,7 +36,7 @@ function Menu() {
                   
                   {/* Thêm Dashboard ở đầu menu */}
                   <li className="sidebar-item">
-                    <NavLink to="/dashboard" className="sidebar-link" activeClassName="active">
+                    <NavLink to="/dashboard" className="" style={{"padding":"10px 15px",marginLeft:26,  borderRadius:8}} activeClassName="border border-info">
                       <i className="fas fa-chart-line"></i>
                       <span className="hide-menu ml-2">Dashboard</span>
                     </NavLink>
