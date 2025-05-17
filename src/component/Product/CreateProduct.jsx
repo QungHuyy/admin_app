@@ -89,7 +89,7 @@ function CreateProduct(props) {
 
     const addProduct = async () => {
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("image", file);
         formData.append("fileName", fileName);
         formData.append("name", name)
         formData.append("price", price)
@@ -101,12 +101,16 @@ function CreateProduct(props) {
         formData.append("description", description)
         formData.append("gender", genderChoose)
         
-        console.log("Sending product data:", {
-            name, price, category: categoryChoose, 
-            inventoryS, inventoryM, inventoryL, description, gender: genderChoose
-        });
+        // console.log("Sending product data:", {
+        //     name, price, category: categoryChoose, 
+        //     inventoryS, inventoryM, inventoryL, description, gender: genderChoose
+        // });
+console.log(file);
 
-        const response = await productAPI.create(formData)
+   
+        const response = await productAPI.create(formData,{
+                "Content-Type": "multipart/form-data"
+            })
 
         if (response.msg === "Bạn đã thêm thành công") {
             setName('');

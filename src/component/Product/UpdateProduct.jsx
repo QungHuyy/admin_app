@@ -108,7 +108,7 @@ function UpdateProduct(props) {
     const addProduct = async () => {
         const formData = new FormData();
         formData.append("id", id);
-        formData.append("file", file);
+        formData.append("image", file);
         formData.append("fileName", fileName);
         formData.append("name", name)
         formData.append("price", price)

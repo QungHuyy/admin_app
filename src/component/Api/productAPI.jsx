@@ -10,9 +10,9 @@ const productAPI = {
         const url = `/admin/product/${id}`
         return axiosClient.get(url)
     },
-    create: (data) => {
+    create: (data, headers = { "Content-Type": "application/json" }) => {
         const url = `/admin/product/create`
-        return axiosClient.post(url, data)
+        return axiosClient.post(url, data,{ headers })
     },
     update: (data) => {
         const url = `/admin/product/update`
