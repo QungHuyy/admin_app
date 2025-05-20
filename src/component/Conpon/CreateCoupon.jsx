@@ -15,20 +15,37 @@ function CreateCoupon(props) {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues });
     const onSubmit = async (data) => {
+        try {
+            const body = {
+                code: data.code,
+                count: data.count,
+                promotion: data.promotion,
+                describe: data.describe
+            }
 
-        const body = {
-            code: data.code,
-            count: data.count,
-            promotion: data.promotion,
-            describe: data.describe
+            const response = await CouponAPI.postCoupons(body)
+
+            setShowMessage(response.msg)
+
+            // Chỉ reset form khi thêm thành công
+            if (response.msg === "Bạn đã thêm thành công") {
+                reset({
+                    code: '',
+                    count: '',
+                    promotion: '',
+                    describe: ''
+                })
+            }
+        } catch (error) {
+            console.error("Error creating coupon:", error)
+
+            // Kiểm tra nếu là lỗi 400 (Bad Request) - mã đã tồn tại
+            if (error.response && error.response.status === 400) {
+                setShowMessage(error.response.data.msg || "Mã giảm giá này đã tồn tại, vui lòng chọn mã khác")
+            } else {
+                setShowMessage("Đã xảy ra lỗi khi tạo mã giảm giá")
+            }
         }
-
-        const response = await CouponAPI.postCoupons(body)
-
-        setShowMessage(response.msg)
-
-        reset({ defaultValues })
-
     };
 
     return (
@@ -83,7 +100,7 @@ function CreateCoupon(props) {
                     </div>
                 </div>
             </div>
-           
+
         </div>
     );
 }

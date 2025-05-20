@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import queryString from 'query-string'
 
 import orderAPI from '../Api/orderAPI';
+import productAPI from '../Api/productAPI';
 import Pagination from '../Shared/Pagination'
 import Search from '../Shared/Search'
 
@@ -12,11 +13,14 @@ function CompletedOrder(props) {
         page: '1',
         limit: '10',
         getDate: '',
+        productId: '',
     })
 
     const [order, setOrder] = useState([])
     const [totalPage, setTotalPage] = useState()
     const [totalMoney, setTotalMoney] = useState()
+    const [products, setProducts] = useState([])
+    const [selectedProduct, setSelectedProduct] = useState('')
 
     useEffect(() => {
         const query = '?' + queryString.stringify(filter)
@@ -68,7 +72,7 @@ function CompletedOrder(props) {
     }
 
 
-    let day = [] 
+    let day = []
     let month = []
 
     for (let i = 1; i < 32; i++){
@@ -96,6 +100,20 @@ function CompletedOrder(props) {
             yearArray.push(i)
         }
         setYears(yearArray)
+
+        // Lấy danh sách sản phẩm
+        const fetchProducts = async () => {
+            try {
+                const response = await productAPI.getAPI('?limit=1000')
+                if (response && response.products) {
+                    setProducts(response.products)
+                }
+            } catch (error) {
+                console.error('Error fetching products:', error)
+            }
+        }
+
+        fetchProducts()
     }, [])
 
     const handlerStatistic = (e) => {
@@ -134,15 +152,15 @@ function CompletedOrder(props) {
             console.log("11")
             setSubMessage('')
             return
-        } 
-        
+        }
+
         // Kiểm tra ngày và năm là rỗng
         if (getDay === 'null' && getMonth !== 'null' && getYear === 'null'){
             setErrMessage('Vui lòng kiểm tra lại!')
             console.log("10")
             setSubMessage('')
             return
-        }           
+        }
         // Check Validation
 
 
@@ -157,7 +175,7 @@ function CompletedOrder(props) {
 
             setSubMessage('Thống Kê Theo Ngày Thành Công!')
             setErrMessage('')
-        }        
+        }
 
         // Xử lý thanh toán theo tháng
         if (getDay === 'null' && getMonth !== 'null' && getYear !== 'null'){
@@ -189,15 +207,33 @@ function CompletedOrder(props) {
         setGetDay('null')
         setGetMonth('null')
         setGetYear('null')
-        
-        // Reset filter về trạng thái ban đầu không có getDate
+        setSelectedProduct('')
+
+        // Reset filter về trạng thái ban đầu không có getDate và productId
         setFilter({
             ...filter,
-            getDate: ''
+            getDate: '',
+            productId: ''
         })
-        
-        setSubMessage('Đã reset thời gian thành công!')
+
+        setSubMessage('Đã reset bộ lọc thành công!')
         setErrMessage('')
+    }
+
+    // Xử lý khi chọn sản phẩm
+    const handleProductChange = (e) => {
+        const productId = e.target.value
+        setSelectedProduct(productId)
+
+        setFilter({
+            ...filter,
+            productId: productId
+        })
+
+        if (productId) {
+            setSubMessage('Đã lọc theo sản phẩm thành công!')
+            setErrMessage('')
+        }
     }
 
     return (
@@ -214,6 +250,7 @@ function CompletedOrder(props) {
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
+                                                <th>Product</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
@@ -230,6 +267,20 @@ function CompletedOrder(props) {
                                                 order && order.map((value, index) => (
                                                     <tr key={index}>
                                                         <td className="name">{value._id}</td>
+                                                        <td className="name">
+                                                            {value.productDetails && value.productDetails.length > 0 ? (
+                                                                <div>
+                                                                    {value.productDetails.map((product, idx) => (
+                                                                        <div key={idx} className="mb-1">
+                                                                            {product.name_product}
+                                                                            <span className="badge badge-info ml-1">
+                                                                                {product.count} {product.size}
+                                                                            </span>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            ) : 'N/A'}
+                                                        </td>
                                                         <td className="name">{value.id_note?.fullname || 'N/A'}</td>
                                                         <td className="name">{value.id_user?.email || 'N/A'}</td>
                                                         <td className="name">{value.id_note?.phone || 'N/A'}</td>
@@ -266,39 +317,65 @@ function CompletedOrder(props) {
                                             <h4>Chọn phương thức thống kê</h4>
                                         </div>
                                         <br />
-                                        <select className="custom-select" style={{ color: 'gray', width: '85px'}}
-                                            value={getDay} onChange={(e) => setGetDay(e.target.value)}>
-                                            <option value="null">Ngày</option>
-                                            {
-                                                day && day.map(d => (
-                                                    <option value={d} key={d}>{d}</option>
-                                                ))
-                                            }
-                                        </select>
-                                        &nbsp;/&nbsp;
-                                        <select className="custom-select" style={{ color: 'gray', width: '85px'}}
-                                            value={getMonth} onChange={(e) => setGetMonth(e.target.value)}>
-                                            <option value="null" >Tháng</option>
-                                            {
-                                                month && month.map(m => (
-                                                    <option value={m} key={m}>{m}</option>
-                                                ))
-                                            }
-                                        </select>
-                                        &nbsp;/&nbsp;
-                                        <select className="custom-select" style={{ color: 'gray', width: '85px'}}
-                                            value={getYear} onChange={(e) => setGetYear(e.target.value)}>
-                                            <option value="null">Năm</option>
-                                            {
-                                                years && years.map(y => (
-                                                    <option value={y} key={y}>{y}</option>
-                                                ))
-                                            }
-                                        </select>
-                                        &nbsp;
-                                        <input type="submit" className="btn btn-primary" value="Lọc Hóa Đơn" onClick={handlerStatistic} />
-                                        &nbsp;
-                                        <button className="btn btn-secondary" onClick={resetTime}>Reset Thời Gian</button>
+                                        <div className="row mb-3">
+                                            <div className="col-md-6">
+                                                <h5>Thống kê theo thời gian</h5>
+                                                <div className="d-flex align-items-center">
+                                                    <select className="custom-select" style={{ color: 'gray', width: '85px'}}
+                                                        value={getDay} onChange={(e) => setGetDay(e.target.value)}>
+                                                        <option value="null">Ngày</option>
+                                                        {
+                                                            day && day.map(d => (
+                                                                <option value={d} key={d}>{d}</option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                    &nbsp;/&nbsp;
+                                                    <select className="custom-select" style={{ color: 'gray', width: '85px'}}
+                                                        value={getMonth} onChange={(e) => setGetMonth(e.target.value)}>
+                                                        <option value="null" >Tháng</option>
+                                                        {
+                                                            month && month.map(m => (
+                                                                <option value={m} key={m}>{m}</option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                    &nbsp;/&nbsp;
+                                                    <select className="custom-select" style={{ color: 'gray', width: '85px'}}
+                                                        value={getYear} onChange={(e) => setGetYear(e.target.value)}>
+                                                        <option value="null">Năm</option>
+                                                        {
+                                                            years && years.map(y => (
+                                                                <option value={y} key={y}>{y}</option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                    &nbsp;
+                                                    <input type="submit" className="btn btn-primary" value="Lọc Theo Thời Gian" onClick={handlerStatistic} />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <h5>Thống kê theo sản phẩm</h5>
+                                                <div className="d-flex align-items-center">
+                                                    <select
+                                                        className="custom-select"
+                                                        style={{ color: 'gray', minWidth: '200px'}}
+                                                        value={selectedProduct}
+                                                        onChange={handleProductChange}
+                                                    >
+                                                        <option value="">Chọn sản phẩm</option>
+                                                        {
+                                                            products && products.map(product => (
+                                                                <option value={product._id} key={product._id}>
+                                                                    {product.name_product}
+                                                                </option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button className="btn btn-secondary" onClick={resetTime}>Reset Bộ Lọc</button>
                                     </div>
                                     <div>
                                     {
@@ -317,7 +394,7 @@ function CompletedOrder(props) {
                     </div>
                 </div>
             </div>
-           
+
         </div>
     );
 }
