@@ -43,7 +43,7 @@ function Menu() {
                   </li>
                   
                   <li className="list-divider"></li>
-                  <li className="nav-small-cap"><span className="hide-menu">Quản lý hệ thống</span></li>
+                  {/* <li className="nav-small-cap"><span className="hide-menu">Quản lý hệ thống</span></li> */}
                   <li className="sidebar-item">
                     <a className="sidebar-link has-arrow" href="#" aria-expanded="false">
                       <i data-feather="grid" className="feather-icon"></i>

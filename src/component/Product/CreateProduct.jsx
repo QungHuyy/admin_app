@@ -216,7 +216,7 @@ console.log(file);
                                     </div>
 
                                     <div className="form-group w-50">
-                                        <label htmlFor="categories" className="mr-2">Chọn nhà sản xuất:</label>
+                                        <label htmlFor="categories" className="mr-2">Chọn loại sản phẩm:</label>
                                         <select name="categories" id="categories" value={categoryChoose} onChange={(e) => setCategoryChoose(e.target.value)}>
                                             <option >Chọn loại</option>
                                             {
@@ -252,7 +252,7 @@ console.log(file);
                 </div>
             </div>
             <footer className="footer text-center text-muted">
-                All Rights Reserved by Adminmart. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
+              
             </footer>
         </div>
     );

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import Logoicon from '../Image/logo-icon.png'
+import Logoicon from '../Image/1.jpg'
 import Logotext from '../Image/logo-text.png'
 import Logolight from '../Image/logo-light-text.png'
 import { AuthContext } from '../context/Auth'
@@ -15,16 +15,12 @@ function Header(props) {
                             <div className="navbar-header" data-logobg="skin6">
                                 <a className="nav-toggler waves-effect waves-light d-block d-md-none" href="#"><i
                                     className="ti-menu ti-close"></i></a>
-                                <div className="navbar-brand">
-                                    <a href="index.html">
+                                <div className="navbar-brand" style={{marginTop:'30px',marginLeft:'-10px'}}>
+                                    <a style={{display:'flex',alignItems:'center'}} href="index.html">
                                         <b className="logo-icon">
-                                            <img src={Logoicon} alt="homepage" className="dark-logo" />
-                                            <img src={Logoicon} alt="homepage" className="light-logo" />
+                                            <img src={Logoicon} alt="homepage" style={{width:'230px'}} />
                                         </b>
-                                        <span className="logo-text">
-                                            <img src={Logotext} alt="homepage" className="dark-logo" />
-                                            <img src={Logolight} className="light-logo" alt="homepage" />
-                                        </span>
+                                      <p></p>
                                     </a>
                                 </div>
                                 <a className="topbartoggler d-block d-md-none waves-effect waves-light" href="#"

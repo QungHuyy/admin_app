@@ -220,7 +220,7 @@ function UpdateProduct(props) {
 
                                     <div className="form-group w-50">
                                         {/* <label htmlFor="categories" className="mr-2">Chọn loại:</label> */}
-                                        <label htmlFor="categories" className="mr-2">Chọn nhà sản xuất:</label>
+                                        <label htmlFor="categories" className="mr-2">Chọn loại sản phẩm: </label>
                                         <select name="categories" id="categories" value={categoryChoose} onChange={(e) => setCategoryChoose(e.target.value)}>
                                             <option >Chọn loại</option>
                                             {
